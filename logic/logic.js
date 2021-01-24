@@ -17,6 +17,7 @@ console.log("Document is Ready");
                 console.log("ajax call success variable after initial search button press = " + ajaxCallSuccess);
             searchedCity = $("#searchedCityInput").val();
             getCityWeather();
+            storeAndPrependNewSearchItem();
         });
 
         //AJAX error event if ajax call fails for any reason
@@ -58,7 +59,7 @@ console.log("Document is Ready");
                         url:currentQueryURL,
                         method: "Get"
                     })
-                    // Then add the needed information to the proper screen elements for current weather...
+                    // Then (assuming the ajax call gave a value response) add the needed information to the proper screen elements for current weather...
                     .then(function(resCurrent){
 
                         // Console log the response object so I can see how to index into it
@@ -66,10 +67,13 @@ console.log("Document is Ready");
 
                         // Validate it returned a response that is usable... (Look at if I need more here beside the alert if ajax fails)
 
-                            // If yes, continue
+                            // If response is not valid update ajax call success value to false and break the loop
 
-                            // If no, alert error message and re-promt to search again
+                            // If response is valid, continue...
 
+                        // Save the city name locally
+                        //localStorage.setItem("City_"+ searchedCity, searchedCity); 
+                        
                         // Get the current city name and define it as a variable, then assign it to the right html element...
 
                         // Get the curren date and define it as a variable, then assign it to the right html element...
@@ -85,6 +89,8 @@ console.log("Document is Ready");
                         // Get teh current UV Index and define it as a variable, then assign it to the right html element...
 
                             // Set the UV index pill the right color based on the value of being good, medium, bad...
+                        
+                        //Prepend the locally stored city name as a new item in the search history bar
 
                     })     
                     
@@ -106,18 +112,27 @@ console.log("Document is Ready");
 
         }
            
+        // Doing this in a global function to work on code block before moving into a function to be come depdent on the function status
+        // Create an array to loop through instead of doing it one by one?? So I can run this loop when page loads?
+        function storeAndPrependNewSearchItem() {
 
-            // If the ajax call yielded some results...Store the searched city to local storage and display it's name in the search history bar (else do nothing)
-            function saveSearchedCityLocally() {
-                if (ajaxCallSuccess === true) {
+            // store value locally
+            localStorage.setItem("City_"+ searchedCity, searchedCity); 
 
-                    // Log the searched city to the local storage (if it gave a valid response, e.x no typos or not an error)- use name as key
-                    localStorage.setItem(searchedCity, searchedCity);
-    
-                    // Create a new element in the search bar history column and Prepend it to the list...
-                }
-            }
-         
+            // create a new div with the search city value
+            var newSearchDiv = $("<div>");
+
+            // Give the new div a class name for bootsrap use list-group-item
+            newSearchDiv.addClass("list-group-item");
+
+            // Make the text of that item equal to whatever the searched city variable is
+            newSearchDiv.text(searchedCity);
+
+            // Prepend that new div inside the div plceholder in html for searchHistoryList
+            $("#searchHistoryList").prepend(newSearchDiv);
+            
+        }
+      
             
                        
 
