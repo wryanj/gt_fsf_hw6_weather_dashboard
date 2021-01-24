@@ -31,7 +31,7 @@
 
     <body>
         <!--This is the NavBar Header-->
-        <nav class="navbar navbar-dark bg-dark">
+        <nav class="navbar navbar-dark bg-dark py-3">
             <span class="navbar-brand mb-0 h1 mx-auto"></i> Weatherly <i class="fab fa-cloudsmith"></i></span>
         </nav>
 
@@ -41,7 +41,7 @@
             <!--Main Row In Container-->
             <div class = "row">
 
-                <!--Search City Column-->
+                <!--Search Column (Seach Bar and Search History)-->
                 <div class = "col-md-3 bg-light">
 
                     <!--Search Bar-->
@@ -51,6 +51,9 @@
                             <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
                           </form>
                     </div>
+
+                    <!--Search History List-->
+                    <div id = "searchHistoryList"></div>
                    
                 </div>
 
@@ -64,7 +67,7 @@
                           <p class="card-text py-1">Temprature Dynamic</p>
                           <p class="card-text py-1">Humidity Dynamic</p>
                           <p class="card-text py-1">Wind Speed Dynamic</p>
-                          <p class="card-text py-1">UV Index Color Coded Dynamic</p>
+                          <p class="card-text py-1">UV Index: <span class="badge badge-pill badge-primary">UV Index</span></p>
                         </div>
                     </div>
 
@@ -74,12 +77,12 @@
 
                         <div class = "card-deck">
 
-                            <div class="card bg-info text-white" style="width: 11rem;">
+                            <div class="card bg-info text-white" style="width: 10rem">
                                 <div class="card-body">
                                   <h6 class="card-title">M/DD/YYY</h6>
                                   <p class="card-text py-1"><i class="fas fa-cloud"></i></p>
-                                  <p class="card-text py-1">Temp: Dynamic</p>
-                                  <p class="card-text py-1">Humidity: Dynamic</p>
+                                  <p class="card-text py-1">Temp: </p>
+                                  <p class="card-text py-1">Humidity:</p>
                                 </div>
                             </div>
     
