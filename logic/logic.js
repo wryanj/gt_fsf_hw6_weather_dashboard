@@ -5,9 +5,10 @@ console.log("Document is Ready");
     // Define Global Variables
     var ajaxCallSuccess = true;
     var searchedCity;
+    var getLatLonQueryURL;
     var searchedCityLAT;
     var searchedCityLON;
-    var currentQueryURL;
+    var getCityWeatherQueryURL;
     var fiveDayQueryURL;
     var currentDate = dayjs().format("dddd, MMMM D");
 
@@ -51,57 +52,57 @@ console.log("Document is Ready");
 
         // When I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityLatLon(){
+        console.log("getCityLatLon invoked");
 
             // Get the lat / lon of the entered city so I can do a one pull API with open weather
 
+                // Define the getLatLon query url...
+                getLatLonQueryURL= "http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3";
+                    console.log("getLatLonQueryURL set to = " + getLatLonQueryURL);
+
                 // Call the current weather API by city name...
                 $.ajax({
-                    url:"http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3",
+                    url:getLatLonQueryURL,
                     method: "GET"
                 })
                 .then(function(resCoordinates){
                     console.log(resCoordinates);
-                     // Get the city LAT / LON values and assign the global variables the value
-                     searchedCityLAT = resCoordinates.coord.lat;
+
+                    // Get the city LAT / LON values and assign the global variables the value
+                    searchedCityLAT = JSON.stringify(resCoordinates.coord.lat);
                     searchedCityLON = resCoordinates.coord.lon;
-                    console.log ("City Lat-Lon Translatoin = " + searchedCityLAT + "," + searchedCityLON);
-                })
+                    console.log ("Initial City Lat-Lon Translation after First API Call = " + searchedCityLAT + "," + searchedCityLON);
 
-                // Call the functoin to run the one-Call API from open weather (which requires search by city Lat / Lon)...
-
+                    // When I complete the call above and define lat lon, Call the functoin to run the one-Call API from open weather (which requires search by city Lat / Lon)...
+                    getCityWeather();
+                })  
         }
+
         function getCityWeather() {
+        console.log("getCityWeather function invoked");
+            console.log ("City Lat Lon Translation Upon Invokation of Secont API Call = " + searchedCityLAT + "," + searchedCityLON);
 
-            // Capture the value of the entry and assign it as the value to my searchedCity variable
-            searchedCity = $("#searchedCityInput").val();
-                console.log ("Searched City Value = " + searchedCity);
+            // Check that searchedCity value is still the same...
+            console.log ("Searched City Value upon invokation of getCityWeather function is = " + searchedCity);
             
-
- 
             // Define the currentQueryURL based on the searched city...
-            currentQueryURL = "http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3"; //UPDATE WITH CONCAT
-                console.log("currentQueryURL variable set = " + currentQueryURL);
+            getCityWeatherQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+searchedCityLAT+"&lon="+searchedCityLON+"&exclude=minutely,hourly,alerts&units=imperial&appid=17d8416444d9b5ae76557381b0e8b7b3";
+                console.log("getCityWeather query URL variable set = " + getCityWeatherQueryURL);
 
-            // Make an API calls to get the latest weather information from OpenWeather API...
+            // Make the One-Call API Call to Open weather to get current and forecasted weather information...
 
-                // (AJAX1) Get the informatoin for the CURRENT weather and add it to the screen...
-    
                     // Request the current information from the API...
                     $.ajax({
-                        url:currentQueryURL,
+                        url:getCityWeatherQueryURL,
                         method: "GET"
                     })
                     // Then (assuming the ajax call gave a valid response) add the needed information to the proper screen elements for current weather...
                     .then(function(resCurrent){
 
+                        // CURRENT WEATHER RETRIEVAL AND HANDLING
+
                         // Console log the response so I can see how to index
                         console.log(resCurrent);
-
-                        // Validate it returned a response that is usable... (Look at if I need more here beside the alert if ajax fails)
-
-                            // If response is not valid update ajax call success value to false and break the loop
-
-                            // If response is valid, continue...
                         
                         // Get the current city name and define it as a variable, then assign it to the right html element...
                         $("#citySearched").text("").text(searchedCity);
@@ -110,23 +111,24 @@ console.log("Document is Ready");
                         $("#currentDate").text(currentDate);
 
                         // Get the weather icon for current weather, then assign it to the right html element
-                        $("#currentWeatherIcon").html(resCurrent.weather[0].icon);
-                            console.log("Icon API result = " + resCurrent.weather[0].icon);
+                        $("#currentWeatherIcon").html(resCurrent.current.weather[0].icon);
+                            console.log("Icon API result = " + resCurrent.current.weather[0].icon);
 
                         // Get the current temprature, then assign it to the right html element..
-                        $("#currentTemp").text(resCurrent.main.temp);
-                            console.log("Temp API result = " + resCurrent.main.temp);
+                        $("#currentTemp").text(resCurrent.current.temp);
+                            console.log("Temp API result = " + resCurrent.current.temp);
 
                         // Get the current humidity, then assign it to the right html element...
-                        $("#currentHumidity").text(resCurrent.main.humidity);
-                            console.log("Humidity API result = " + resCurrent.main.humidity);
+                        $("#currentHumidity").text(resCurrent.current.humidity);
+                            console.log("Humidity API result = " + resCurrent.current.humidity);
 
                         // Get the current windspeed and define it as a variable, then assign it to the right html element...
-                        $("#currentWindSpeed").text(resCurrent.wind.speed);
-                            console.log("Current Wind Speed API Result = " + resCurrent.wind.speed);
+                        $("#currentWindSpeed").text(resCurrent.current.wind_speed);
+                            console.log("Current Wind Speed API Result = " + resCurrent.current.wind_speed);
 
                         // Get the current UV Index and define it as a variable, then assign it to the right html element...
-                        $("#currentUVIndex").text("Cant Find in API...follow up");
+                        $("#currentUVIndex").text(resCurrent.current.uvi);
+                            console.log("Current UVI Result = " + resCurrent.current.uvi)
 
                             // Set the UV index pill the right color based on the value of being good, medium, bad...
                         
@@ -135,7 +137,7 @@ console.log("Document is Ready");
 
                     })     
                     
-                // (AJAX2) Get the informatoin for the FIVE DAY FORECAST weather and add it to the screen...
+                // 5 DAY FORECAST
 
                     // Request the forecast information from the API
 
