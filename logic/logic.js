@@ -56,7 +56,7 @@ console.log("Document is Ready");
                 console.log ("Searched City Value = " + searchedCity);
  
             // Define the currentQueryURL based on the searched city...
-            currentQueryURL = "http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&APPID=17d8416444d9b5ae76557381b0e8b7b3"; //UPDATE WITH CONCAT
+            currentQueryURL = "http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3"; //UPDATE WITH CONCAT
                 console.log("currentQueryURL variable set = " + currentQueryURL);
 
             // Make an API calls to get the latest weather information from OpenWeather API...
