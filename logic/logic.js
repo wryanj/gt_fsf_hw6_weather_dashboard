@@ -2,8 +2,12 @@
 $(document).ready(function(){
 console.log("Document is Ready");
 
-    // Define Global Variables
+    // Define date objects using day.js
     var currentDate = dayjs().format("dddd, MMMM D"); // Retrieved via Day.Js API
+    var day2 = dayjs().add(1, "day").format("dddd, MMMM D");
+        console.log("Day two logged as = " + day2);
+
+    // Define Global Variables
     var ajaxCallSuccess = true;
     var searchedCity;
     var getLatLonQueryURL;
@@ -159,17 +163,13 @@ console.log("Document is Ready");
                         
                     // Call the function below to store city locally and add it to recently searched bar
                     storeAndPrependNewSearchItem();
-                    })     
-                    
+                
                 // 5 DAY FORECAST (MAKE OWN FUNCTION?)
 
-                    // Request the forecast information from the API
-
                     // Get the forecast for the current date, then loop through the activity for each day in the five day forecast...
+                    for (i = 0; i<resCurrent.daily.length; i++) {
 
-                        // Console log the response object so I can see how to index into it
-
-                        // Get the date "i" starting with the current date, the assign it to the right HTML element
+                        // Get the date "i" starting with the current date, the assign it to the right HTML element based on data-dayIndex attribute
 
                         // Get the weather forecast icon for the date i, and assign it to the proper html elemenet
 
@@ -177,10 +177,14 @@ console.log("Document is Ready");
 
                         // Get the humidity for the date i, and assign it to the proper html elemene
 
+                    }     
+
+            }) 
+                    
+                    
         }
            
-        // Doing this in a global function to work on code block before moving into a function to be come depdent on the function status
-        // Create an array to loop through instead of doing it one by one?? So I can run this loop when page loads?
+        // Function called to store locally and prepend a searched city to the search history bar
         function storeAndPrependNewSearchItem() {
             console.log("storeandprepend function called")
 
@@ -200,9 +204,6 @@ console.log("Document is Ready");
             $("#searchHistoryList").prepend(newSearchDiv);
             
         }
-
-      
-            
-                       
+             
 
 }) // End of Document.Ready Wrap
