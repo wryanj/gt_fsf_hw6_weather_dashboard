@@ -7,6 +7,7 @@ console.log("Document is Ready");
     var searchedCity;
     var currentQueryURL;
     var fiveDayQueryURL;
+    var currentDate = dayjs().format("dddd, MMMM D");
 
     // Define Event Handlers
         //Click Event For Search Button
@@ -17,7 +18,6 @@ console.log("Document is Ready");
                 console.log("ajax call success variable after initial search button press = " + ajaxCallSuccess);
             searchedCity = $("#searchedCityInput").val();
             getCityWeather();
-            storeAndPrependNewSearchItem();
         });
 
         //AJAX error event if ajax call fails for any reason
@@ -43,11 +43,13 @@ console.log("Document is Ready");
 
         // When I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityWeather() {
-             // Capture the value of the entry and assign it as the value to my searchedCity variable
-                console.log("searchedCity variable set = " + searchedCity);
+
+            // Capture the value of the entry and assign it as the value to my searchedCity variable
+            searchedCity = $("#searchedCityInput").val();
+                console.log ("Searched City Value = " + searchedCity);
  
             // Define the currentQueryURL based on the searched city...
-            currentQueryURL = "api.openweathermap.org/data/2.5/weather?q=" + searchedCity + "&appid=17d8416444d9b5ae76557381b0e8b7b3";
+            currentQueryURL = "http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=17d8416444d9b5ae76557381b0e8b7b3"; //UPDATE WITH CONCAT
                 console.log("currentQueryURL variable set = " + currentQueryURL);
 
             // Make an API calls to get the latest weather information from OpenWeather API...
@@ -59,38 +61,47 @@ console.log("Document is Ready");
                         url:currentQueryURL,
                         method: "Get"
                     })
-                    // Then (assuming the ajax call gave a value response) add the needed information to the proper screen elements for current weather...
+                    // Then (assuming the ajax call gave a valid response) add the needed information to the proper screen elements for current weather...
                     .then(function(resCurrent){
 
-                        // Console log the response object so I can see how to index into it
-                        console.log("API Call Object Returned = " + resCurrent);
+                        // Console log the response so I can see how to index
+                        console.log(resCurrent);
 
                         // Validate it returned a response that is usable... (Look at if I need more here beside the alert if ajax fails)
 
                             // If response is not valid update ajax call success value to false and break the loop
 
                             // If response is valid, continue...
-
-                        // Save the city name locally
-                        //localStorage.setItem("City_"+ searchedCity, searchedCity); 
                         
                         // Get the current city name and define it as a variable, then assign it to the right html element...
+                        $("#citySearched").text("").text(searchedCity);
 
-                        // Get the curren date and define it as a variable, then assign it to the right html element...
+                        // Get the current date, then assign it to the right html element...
+                        $("#currentDate").text(currentDate);
 
-                        // Get the weather icon for current weather and define as a variable, then assign it to the right html element
+                        // Get the weather icon for current weather, then assign it to the right html element
+                        $("#currentWeatherIcon").html(resCurrent.weather[0].icon);
+                            console.log("Icon API result = " + resCurrent.weather[0].icon);
 
-                        // Get the current temprature and define it as a variable, then assign it to the right html element..
+                        // Get the current temprature, then assign it to the right html element..
+                        $("#currentTemp").text(resCurrent.main.temp);
+                            console.log("Temp API result = " + resCurrent.main.temp);
 
-                        // Get the current humidity and define it as a variable, then assign it to the right html element...
+                        // Get the current humidity, then assign it to the right html element...
+                        $("#currentHumidity").text(resCurrent.main.humidity);
+                            console.log("Humidity API result = " + resCurrent.main.humidity);
 
                         // Get the current windspeed and define it as a variable, then assign it to the right html element...
+                        $("#currentWindSpeed").text(resCurrent.wind.speed);
+                            console.log("Current Wind Speed API Result = " + resCurrent.wind.speed);
 
-                        // Get teh current UV Index and define it as a variable, then assign it to the right html element...
+                        // Get the current UV Index and define it as a variable, then assign it to the right html element...
+                        $("#currentUVIndex").text("Cant Find in API...follow up");
 
                             // Set the UV index pill the right color based on the value of being good, medium, bad...
                         
-                        //Prepend the locally stored city name as a new item in the search history bar
+                        // Call the function below to store city locally and add it to recently searched bar
+                        storeAndPrependNewSearchItem();
 
                     })     
                     
@@ -115,6 +126,7 @@ console.log("Document is Ready");
         // Doing this in a global function to work on code block before moving into a function to be come depdent on the function status
         // Create an array to loop through instead of doing it one by one?? So I can run this loop when page loads?
         function storeAndPrependNewSearchItem() {
+            console.log("storeandprepend function called")
 
             // store value locally
             localStorage.setItem("City_"+ searchedCity, searchedCity); 
