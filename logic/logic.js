@@ -2,10 +2,17 @@
 $(document).ready(function(){
 console.log("Document is Ready");
 
-    // Define date objects using day.js
-    var currentDate = dayjs().format("dddd, MMMM D"); // Retrieved via Day.Js API
-    var day2 = dayjs().add(1, "day").format("dddd, MMMM D");
+    // Define 5 Day Dates (Today + 4 Days) Using Day.JS API
+    var currentDate = dayjs().format("MM/DD/YYYY"); // Retrieved via Day.Js API
+        console.log("Current Date logged as = " + currentDate);
+    var day2 = dayjs().add(1, "day").format("MM/DD/YYYY");
         console.log("Day two logged as = " + day2);
+    var day3 = dayjs().add(2, "day").format("MM/DD/YYYY");
+        console.log("Day two logged as = " + day3);
+    var day4 = dayjs().add(3, "day").format("MM/DD/YYYY");
+        console.log("Day two logged as = " + day4);
+    var day5 = dayjs().add(4, "day").format("MM/DD/YYYY");
+        console.log("Day two logged as = " + day5);
 
     // Define Global Variables
     var ajaxCallSuccess = true;
