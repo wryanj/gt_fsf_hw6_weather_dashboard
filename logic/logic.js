@@ -27,6 +27,13 @@ console.log("Document is Ready");
             console.log("ajax call success variable set to = " + ajaxCallSuccess);
         })
 
+        // Click Event For Clear Search History Button
+        $("#clearSearchHistory").on("click", function() {
+            localStorage.clear();
+            $("#searchHistoryList").empty();
+        })
+        
+
     // Define Script Logic
 
         // When page loads...
@@ -144,6 +151,7 @@ console.log("Document is Ready");
             $("#searchHistoryList").prepend(newSearchDiv);
             
         }
+
       
             
                        
