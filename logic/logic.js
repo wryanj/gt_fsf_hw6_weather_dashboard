@@ -5,6 +5,8 @@ console.log("Document is Ready");
     // Define Global Variables
     var ajaxCallSuccess = true;
     var searchedCity;
+    var searchedCityLAT;
+    var searchedCityLON;
     var currentQueryURL;
     var fiveDayQueryURL;
     var currentDate = dayjs().format("dddd, MMMM D");
@@ -17,7 +19,7 @@ console.log("Document is Ready");
             ajaxCallSuccess = true; // This resets the status check I will use before saving something locally. Its set to false if the ajax call fails.
                 console.log("ajax call success variable after initial search button press = " + ajaxCallSuccess);
             searchedCity = $("#searchedCityInput").val();
-            getCityWeather();
+            getCityLatLon();
         });
 
         //AJAX error event if ajax call fails for any reason
@@ -33,7 +35,6 @@ console.log("Document is Ready");
             $("#searchHistoryList").empty();
         })
         
-
     // Define Script Logic
 
         // When page loads...
@@ -49,11 +50,33 @@ console.log("Document is Ready");
             // Run the getCityWeather Function...
 
         // When I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
+        function getCityLatLon(){
+
+            // Get the lat / lon of the entered city so I can do a one pull API with open weather
+
+                // Call the current weather API by city name...
+                $.ajax({
+                    url:"http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3",
+                    method: "GET"
+                })
+                .then(function(resCoordinates){
+                    console.log(resCoordinates);
+                     // Get the city LAT / LON values and assign the global variables the value
+                     searchedCityLAT = resCoordinates.coord.lat;
+                    searchedCityLON = resCoordinates.coord.lon;
+                    console.log ("City Lat-Lon Translatoin = " + searchedCityLAT + "," + searchedCityLON);
+                })
+
+                // Call the functoin to run the one-Call API from open weather (which requires search by city Lat / Lon)...
+
+        }
         function getCityWeather() {
 
             // Capture the value of the entry and assign it as the value to my searchedCity variable
             searchedCity = $("#searchedCityInput").val();
                 console.log ("Searched City Value = " + searchedCity);
+            
+
  
             // Define the currentQueryURL based on the searched city...
             currentQueryURL = "http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3"; //UPDATE WITH CONCAT
@@ -62,11 +85,11 @@ console.log("Document is Ready");
             // Make an API calls to get the latest weather information from OpenWeather API...
 
                 // (AJAX1) Get the informatoin for the CURRENT weather and add it to the screen...
-
+    
                     // Request the current information from the API...
                     $.ajax({
                         url:currentQueryURL,
-                        method: "Get"
+                        method: "GET"
                     })
                     // Then (assuming the ajax call gave a valid response) add the needed information to the proper screen elements for current weather...
                     .then(function(resCurrent){
