@@ -3,14 +3,14 @@ $(document).ready(function(){
 console.log("Document is Ready");
 
     // Define Global Variables
+    var currentDate = dayjs().format("dddd, MMMM D"); // Retrieved via Day.Js API
     var ajaxCallSuccess = true;
     var searchedCity;
     var getLatLonQueryURL;
     var searchedCityLAT;
     var searchedCityLON;
     var getCityWeatherQueryURL;
-    var fiveDayQueryURL;
-    var currentDate = dayjs().format("dddd, MMMM D");
+    
 
     // Define Event Handlers
         //Click Event For Search Button
@@ -50,11 +50,11 @@ console.log("Document is Ready");
 
             // Run the getCityWeather Function...
 
-        // When I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
+        // If I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityLatLon(){
         console.log("getCityLatLon invoked");
 
-            // Get the lat / lon of the entered city so I can do a one pull API with open weather
+            // Get the LAT and LON coordinats for the searched city so I can use those for a one-call API for current and forecasted weather...
 
                 // Define the getLatLon query url...
                 getLatLonQueryURL= "http://api.openweathermap.org/data/2.5/weather?q="+searchedCity+"&units=imperial&APPID=17d8416444d9b5ae76557381b0e8b7b3";
@@ -78,66 +78,90 @@ console.log("Document is Ready");
                 })  
         }
 
+        // After the search button is clicked, and the function is run that gets LAT / LON Coordinates for my city....
         function getCityWeather() {
         console.log("getCityWeather function invoked");
-            console.log ("City Lat Lon Translation Upon Invokation of Secont API Call = " + searchedCityLAT + "," + searchedCityLON);
 
-            // Check that searchedCity value is still the same...
+            // Check that searchedCity value and coordinates defined are  still the same...
             console.log ("Searched City Value upon invokation of getCityWeather function is = " + searchedCity);
+            console.log ("City Lat Lon Translation Upon Invokation of Secont API Call = " + searchedCityLAT + "," + searchedCityLON);
             
-            // Define the currentQueryURL based on the searched city...
+            // Define the getCityWeatherURL based on the searched city and its related lat lon coordinates...
             getCityWeatherQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat="+searchedCityLAT+"&lon="+searchedCityLON+"&exclude=minutely,hourly,alerts&units=imperial&appid=17d8416444d9b5ae76557381b0e8b7b3";
                 console.log("getCityWeather query URL variable set = " + getCityWeatherQueryURL);
 
-            // Make the One-Call API Call to Open weather to get current and forecasted weather information...
+            // Make the One-Call API Call to Open weather to get current and forecasted weather information for that City...
+            $.ajax({
+                url:getCityWeatherQueryURL,
+                method: "GET"
+            })
 
-                    // Request the current information from the API...
-                    $.ajax({
-                        url:getCityWeatherQueryURL,
-                        method: "GET"
-                    })
-                    // Then (assuming the ajax call gave a valid response) add the needed information to the proper screen elements for current weather...
-                    .then(function(resCurrent){
+            // Then get the needed information and update the appropriate on-screen elements
+            .then(function(resCurrent){
 
-                        // CURRENT WEATHER RETRIEVAL AND HANDLING
+                // CURRENT WEATHER RETRIEVAL AND HANDLING (MAKE OWN FUNCTION?)
 
-                        // Console log the response so I can see how to index
-                        console.log(resCurrent);
+                    // Console log the response so I can see how to index
+                    console.log(resCurrent);
                         
-                        // Get the current city name and define it as a variable, then assign it to the right html element...
-                        $("#citySearched").text("").text(searchedCity);
+                    // Get the current city name and define it as a variable, then assign it to the right html element...
+                    $("#citySearched").text("").text(searchedCity);
 
-                        // Get the current date, then assign it to the right html element...
-                        $("#currentDate").text(currentDate);
+                    // Get the current date, then assign it to the right html element...
+                    $("#currentDate").text(currentDate);
 
-                        // Get the weather icon for current weather, then assign it to the right html element
-                        $("#currentWeatherIcon").html(resCurrent.current.weather[0].icon);
-                            console.log("Icon API result = " + resCurrent.current.weather[0].icon);
+                    // Get the weather icon for current weather, then assign it to the right html element
+                    $("#currentWeatherIcon").html(resCurrent.current.weather[0].icon);
+                        console.log("Icon API result = " + resCurrent.current.weather[0].icon);
 
-                        // Get the current temprature, then assign it to the right html element..
-                        $("#currentTemp").text(resCurrent.current.temp);
-                            console.log("Temp API result = " + resCurrent.current.temp);
+                    // Get the current temprature, then assign it to the right html element..
+                    $("#currentTemp").text(resCurrent.current.temp);
+                        console.log("Temp API result = " + resCurrent.current.temp);
 
-                        // Get the current humidity, then assign it to the right html element...
-                        $("#currentHumidity").text(resCurrent.current.humidity);
-                            console.log("Humidity API result = " + resCurrent.current.humidity);
+                    // Get the current humidity, then assign it to the right html element...
+                    $("#currentHumidity").text(resCurrent.current.humidity);
+                        console.log("Humidity API result = " + resCurrent.current.humidity);
 
-                        // Get the current windspeed and define it as a variable, then assign it to the right html element...
-                        $("#currentWindSpeed").text(resCurrent.current.wind_speed);
-                            console.log("Current Wind Speed API Result = " + resCurrent.current.wind_speed);
+                    // Get the current windspeed and define it as a variable, then assign it to the right html element...
+                    $("#currentWindSpeed").text(resCurrent.current.wind_speed);
+                        console.log("Current Wind Speed API Result = " + resCurrent.current.wind_speed);
 
-                        // Get the current UV Index and define it as a variable, then assign it to the right html element...
-                        $("#currentUVIndex").text(resCurrent.current.uvi);
-                            console.log("Current UVI Result = " + resCurrent.current.uvi)
+                    // Get the current UV Index and define it as a variable, then assign it to the right html element...
+                    $("#currentUVIndex").text(resCurrent.current.uvi);
+                        console.log("Current UVI Result = " + resCurrent.current.uvi)
+                        currentUVI = resCurrent.current.uvi;
 
-                            // Set the UV index pill the right color based on the value of being good, medium, bad...
+                        // Set the UV index pill the right color based on the value of being Low,Moderate,High,VeryHigh...
+
+                            // Set to Low (Green)
+                            if (currentUVI<3) {
+                                $("#uviPill").removeClass("badge-primary badge-warning badge-danger");
+                                $("#uviPill").addClass("badge-success");
+                            }
+
+                            // Set to Moderate (Blue)
+                            if (currentUVI>3 && currentUVI<6) {
+                                $("#uviPill").removeClass("badge-success badge-warning badge-danger");
+                                $("#uviPill").addClass("badge-primary");
+                            }
+
+                            // Set to High (Yellow)
+                            if (currentUVI>6 && currentUVI<8) {
+                                $("#uviPill").removeClass("badge-success badge-primary badge-danger");
+                                $("#uviPill").addClass("badge-warning");
+                            }
+
+                            // Set to Very High (Red)
+                            if (currentUVI>8) {
+                                $("#uviPill").removeClass("badge-success badge-warning badge-primary");
+                                $("#uviPill").addClass("badge-danger");
+                            }
                         
-                        // Call the function below to store city locally and add it to recently searched bar
-                        storeAndPrependNewSearchItem();
-
+                    // Call the function below to store city locally and add it to recently searched bar
+                    storeAndPrependNewSearchItem();
                     })     
                     
-                // 5 DAY FORECAST
+                // 5 DAY FORECAST (MAKE OWN FUNCTION?)
 
                     // Request the forecast information from the API
 
