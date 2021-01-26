@@ -240,7 +240,13 @@ $(document).ready(function(){
                         $("#day"+i+"date").text(fiveDayArray[i]);
 
                         // Get the weather forecast icon for the date i, and assign it to the proper html elemenet
-                        $("#day"+i+"icon").html(response.daily[i].weather[0].icon);
+
+                            // Define the src URL for the icon based on the code by resetting values of local variables used above...
+                            iconCode = response.daily[i].weather[0].icon;
+                            iconURL = "http://openweathermap.org/img/wn/"+iconCode+"@2x.png";
+
+                            // Update the src attribute of the card...
+                            $("#day"+i+"icon").attr("src", iconURL);
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
                         $("#day"+i+"temp").text("Temp: " + response.daily[i].temp.day);

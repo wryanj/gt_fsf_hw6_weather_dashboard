@@ -1,0 +1,4 @@
+/* Style for all p elemenets within the five day forecast card-deck*/
+.card-deck p {
+    font-size: small;
+}
