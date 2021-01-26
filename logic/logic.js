@@ -31,9 +31,6 @@ $(document).ready(function(){
             searchedCity = $("#searchedCityInput").val();
             // Invoke the get City Lat Lon Functoin (which runs into the get city weather functoin)
             getCityLatLon();
-            // Display the Search History Header and Clear Button
-            $("#clearSearchHistoryButton").removeClass("d-none");
-            $("#clearSearchHistoryHeading").removeClass("d-none");
         });
 
         // If there is an error of any kind with the AJAX call...
@@ -56,6 +53,8 @@ $(document).ready(function(){
             // Set the searched history array back to nothing...
             retrievedSearchHistoryArray = [""];
                 console.log("retrieved search history array after clear = " +retrievedSearchHistoryArray);
+            // Reload the page..
+            location.reload();
         })
         
     // Define Script Logic
@@ -252,10 +251,10 @@ $(document).ready(function(){
                             $("#day"+i+"icon").attr("src", iconURL);
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
-                        $("#day"+i+"temp").text("Temp: " + response.daily[i].temp.day + "F");
+                        $("#day"+i+"temp").text("TEMP: " + response.daily[i].temp.day + "F");
 
                         // Get the humidity for the date i, and assign it to the proper html element
-                        $("#day"+i+"humidity").text("Hmdty: " + response.daily[i].temp.day + "%");
+                        $("#day"+i+"humidity").text("HUM: " + response.daily[i].temp.day + "%");
 
                     }     
 
@@ -263,6 +262,10 @@ $(document).ready(function(){
                 $("#welcomeScreenContainer").addClass("d-none");
                 $("#currentWeatherContainer").removeClass("d-none");
                 $("#fiveDayForecastContainer").removeClass("d-none");
+
+                // Display the Recently Searched Heading and the Clear History Button
+                $("#clearSearchHistoryButton").removeClass("d-none");
+                $("#clearSearchHistoryHeading").removeClass("d-none");
 
             }) 
                              
