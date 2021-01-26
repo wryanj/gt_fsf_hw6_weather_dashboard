@@ -2,19 +2,21 @@
 $(document).ready(function(){
 console.log("Document is Ready");
 
-    // Define 5 Day Dates (Today + 4 Days) Using Day.JS API
-    var fiveDayObject = {
-        day0: dayjs().format("MM/DD/YYYY"), // Day 0 is currente day
-        day1: dayjs().add(1, "day").format("MM/DD/YYYY"),
-        day2: dayjs().add(2, "day").format("MM/DD/YYYY"),
-        day3: dayjs().add(3, "day").format("MM/DD/YYYY"),
-        day4: dayjs().add(4, "day").format("MM/DD/YYYY"),
-    }
-        console.log("day 0 set to = " + fiveDayObject.day0);
-        console.log("day 1 set to = " + fiveDayObject.day1);
-        console.log("day 2 set to = " + fiveDayObject.day2);
-        console.log("day 3 set to = " + fiveDayObject.day3);
-        console.log("day 4 set to = " + fiveDayObject.day4);
+    // Define Dates For 5 Day Forecast and Group In an Array
+    
+        var day0 = dayjs().format("MM/DD/YYYY"); // Day 0 is currente day
+        var day1 = dayjs().add(1, "day").format("MM/DD/YYYY");
+        var day2 = dayjs().add(2, "day").format("MM/DD/YYYY");
+        var day3= dayjs().add(3, "day").format("MM/DD/YYYY");
+        var day4 = dayjs().add(4, "day").format("MM/DD/YYYY");
+    
+        var fiveDayArray = [day0, day1, day2, day3,day4];
+        
+            console.log(fiveDayArray[0]);
+            console.log(fiveDayArray[1]);
+            console.log(fiveDayArray[2]);
+            console.log(fiveDayArray[3]);
+            console.log(fiveDayArray[3]);
 
     // Define Global Variables
     var ajaxCallSuccess = true;
@@ -120,7 +122,7 @@ console.log("Document is Ready");
                     $("#citySearched").text("").text(searchedCity);
 
                     // Get the current date, then assign it to the right html element...
-                    $("#currentDate").text(currentDate);
+                    $("#currentDate").text(fiveDayArray[0]);
 
                     // Get the weather icon for current weather, then assign it to the right html element
                     $("#currentWeatherIcon").html(resCurrent.current.weather[0].icon);
@@ -175,9 +177,14 @@ console.log("Document is Ready");
                 // 5 DAY FORECAST (MAKE OWN FUNCTION?)
 
                     // Get the forecast for the current date, then loop through the activity for each day in the five day forecast...
-                    for (i = 0; i<resCurrent.daily.length; i++) {
+                    for (i = 0; i<5; i++) {
+                        console.log("For Loop increment = " + i);
 
                         // Get the date "i" starting with the current date, the assign it to the right HTML element based on data-dayIndex attribute
+                        $("#day"+i+"date").text(fiveDayObject[i]);
+                        console.log($("#day"+i+"date"));
+                        console.log(fiveDayObject.day+i);
+
 
                         // Get the weather forecast icon for the date i, and assign it to the proper html elemenet
 
