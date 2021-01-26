@@ -78,10 +78,10 @@ $(document).ready(function(){
                     for (i=0; i<retrievedSearchHistoryArray.length; i++) {
 
                         // create a new div with the search city value
-                        var newSearchDiv = $("<div>");
+                        var newSearchDiv = $("<button>");
 
                         // Give the new div a class name for bootsrap use list-group-item
-                        newSearchDiv.addClass("list-group-item");
+                        newSearchDiv.addClass("btn btn-light btn-block bg-white my-1 text-left");
 
                         // Make the text of that item equal to whatever the searched city variable is
                         newSearchDiv.text(retrievedSearchHistoryArray[i]);
@@ -290,10 +290,10 @@ $(document).ready(function(){
                 localStorage.setItem("searchedCityHistory", JSON.stringify(retrievedSearchHistoryArray)); 
          
                 // create a new div with the search city value
-                var newSearchDiv = $("<div>");
+                var newSearchDiv = $("<button>");
          
                 // Give the new div a class name for bootsrap use list-group-item
-                newSearchDiv.addClass("list-group-item");
+                newSearchDiv.addClass("btn btn-light btn-block bg-white text-left my-1");
          
                 // Make the text of that item equal to whatever the searched city variable is
                 newSearchDiv.text(searchedCity);
