@@ -111,12 +111,12 @@ console.log("Document is Ready");
             })
 
             // Then get the needed information and update the appropriate on-screen elements
-            .then(function(resCurrent){
+            .then(function(response){
 
                 // CURRENT WEATHER RETRIEVAL AND HANDLING (MAKE OWN FUNCTION?)
 
                     // Console log the response so I can see how to index
-                    console.log(resCurrent);
+                    console.log(response);
                         
                     // Get the current city name and define it as a variable, then assign it to the right html element...
                     $("#citySearched").text("").text(searchedCity);
@@ -125,25 +125,25 @@ console.log("Document is Ready");
                     $("#currentDate").text(fiveDayArray[0]);
 
                     // Get the weather icon for current weather, then assign it to the right html element
-                    $("#currentWeatherIcon").html(resCurrent.current.weather[0].icon);
-                        console.log("Icon API result = " + resCurrent.current.weather[0].icon);
+                    $("#currentWeatherIcon").html(response.current.weather[0].icon);
+                        console.log("Icon API result = " + response.current.weather[0].icon);
 
                     // Get the current temprature, then assign it to the right html element..
-                    $("#currentTemp").text(resCurrent.current.temp);
-                        console.log("Temp API result = " + resCurrent.current.temp);
+                    $("#currentTemp").text(response.current.temp);
+                        console.log("Temp API result = " + response.current.temp);
 
                     // Get the current humidity, then assign it to the right html element...
-                    $("#currentHumidity").text(resCurrent.current.humidity);
-                        console.log("Humidity API result = " + resCurrent.current.humidity);
+                    $("#currentHumidity").text(response.current.humidity);
+                        console.log("Humidity API result = " + response.current.humidity);
 
                     // Get the current windspeed and define it as a variable, then assign it to the right html element...
-                    $("#currentWindSpeed").text(resCurrent.current.wind_speed);
-                        console.log("Current Wind Speed API Result = " + resCurrent.current.wind_speed);
+                    $("#currentWindSpeed").text(response.current.wind_speed);
+                        console.log("Current Wind Speed API Result = " + response.current.wind_speed);
 
                     // Get the current UV Index and define it as a variable, then assign it to the right html element...
-                    $("#currentUVIndex").text(resCurrent.current.uvi);
-                        console.log("Current UVI Result = " + resCurrent.current.uvi)
-                        currentUVI = resCurrent.current.uvi;
+                    $("#currentUVIndex").text(response.current.uvi);
+                        console.log("Current UVI Result = " + response.current.uvi)
+                        currentUVI = response.current.uvi;
 
                         // Set the UV index pill the right color based on the value of being Low,Moderate,High,VeryHigh...
 
@@ -182,10 +182,9 @@ console.log("Document is Ready");
 
                         // Get the date "i" starting with the current date, the assign it to the right HTML element based on data-dayIndex attribute
                         $("#day"+i+"date").text(fiveDayArray[i]);
-                            console.log($("#day"+i+"date"));
-                            console.log(fiveDayArray[i]);
 
                         // Get the weather forecast icon for the date i, and assign it to the proper html elemenet
+                        $("#day"+i+"icon").html()
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
 
