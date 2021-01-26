@@ -184,11 +184,13 @@ console.log("Document is Ready");
                         $("#day"+i+"date").text(fiveDayArray[i]);
 
                         // Get the weather forecast icon for the date i, and assign it to the proper html elemenet
-                        $("#day"+i+"icon").html()
+                        $("#day"+i+"icon").html(response.daily[i].weather[0].icon);
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
+                        $("#day"+i+"temp").text("Temp: " + response.daily[i].temp.day);
 
-                        // Get the humidity for the date i, and assign it to the proper html elemene
+                        // Get the humidity for the date i, and assign it to the proper html element
+                        $("#day"+i+"humidity").text("Humidity: " + response.daily[i].temp.day);
 
                     }     
 
