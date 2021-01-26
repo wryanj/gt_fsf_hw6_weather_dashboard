@@ -31,6 +31,9 @@ $(document).ready(function(){
             searchedCity = $("#searchedCityInput").val();
             // Invoke the get City Lat Lon Functoin (which runs into the get city weather functoin)
             getCityLatLon();
+            // Display the Search History Header and Clear Button
+            $("#clearSearchHistoryButton").removeClass("d-none");
+            $("#clearSearchHistoryHeading").removeClass("d-none");
         });
 
         // If there is an error of any kind with the AJAX call...
@@ -42,13 +45,14 @@ $(document).ready(function(){
         })
 
         // On Click of the Clear Search history buton....
-        $("#clearSearchHistory").on("click", function() {
+        $("#clearSearchHistoryButton").on("click", function() {
             // Empty out local storage...
             localStorage.clear();
             // Clear out all the search history divs appended to the search history ba...
             $("#searchHistoryList").empty();
-            // Hide the Clear Search History Button...
-            $("#clearSearchHistory").addClass("d-none");
+            // Hide the Clear Search History Button and the heading...
+            $("#clearSearchHistoryButton").addClass("d-none");
+            $("#clearSearchHistoryHeading").addClass("d-none");
             // Set the searched history array back to nothing...
             retrievedSearchHistoryArray = [""];
                 console.log("retrieved search history array after clear = " +retrievedSearchHistoryArray);
@@ -87,8 +91,9 @@ $(document).ready(function(){
                         $("#searchHistoryList").append(newSearchDiv);
                     }
 
-                    // Show the clear storage button...
-                    $("#clearSearchHistory").removeClass("d-none");
+                    // Show the clear storage button and heading...
+                    $("#clearSearchHistoryButton").removeClass("d-none");
+                    $("#clearSearchHistoryHeading").removeClass("d-none");
 
                     // Populate weather information (current and 5 day) for last city searched...
 
@@ -99,17 +104,15 @@ $(document).ready(function(){
                         // Call the get CityLatLon function which leads into the get weather function...
                         getCityLatLon();
                     
-                    // Remove the d-none class for the main containers for current and 5 day forecast...
-
+                    // Remove the d-none class for the main containers for current and 5 day forecast & hide the welcome screen container...
+                    $("#welcomeScreenContainer").addClass("d-none");
+                    $("#currentWeatherContainer").removeClass("d-none");
+                    $("#fiveDayForecastContainer").removeClass("d-none");
                 } 
-                //If no search history is found...
-                //else {
 
-                    // Display the welcome DIV that prompts the user to search a city to get started...
-
-                //}
+                //If no search history is found...just display the welcome screen which is visible by default unless the class is added to hide it
+                
               
-
         // If I click on a city that is showing in the search history bar...
 
             // Assign the value text as the value of searched city variable...
@@ -249,12 +252,18 @@ $(document).ready(function(){
                             $("#day"+i+"icon").attr("src", iconURL);
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
-                        $("#day"+i+"temp").text("Temp: " + response.daily[i].temp.day);
+                        $("#day"+i+"temp").text("Temp: " + response.daily[i].temp.day + "F");
 
                         // Get the humidity for the date i, and assign it to the proper html element
-                        $("#day"+i+"humidity").text("Humidity: " + response.daily[i].temp.day);
+                        $("#day"+i+"humidity").text("Hmdty: " + response.daily[i].temp.day + "%");
 
                     }     
+
+                // Hide the welcome screen and display the weather containers once information is loaded
+                $("#welcomeScreenContainer").addClass("d-none");
+                $("#currentWeatherContainer").removeClass("d-none");
+                $("#fiveDayForecastContainer").removeClass("d-none");
+
             }) 
                              
         }
