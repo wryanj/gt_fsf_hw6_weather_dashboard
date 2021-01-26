@@ -246,9 +246,12 @@ $(document).ready(function(){
                             // Define the src URL for the icon based on the code by resetting values of local variables used above...
                             iconCode = response.daily[i].weather[0].icon;
                             iconURL = "http://openweathermap.org/img/wn/"+iconCode+"@2x.png";
+                                console.log("icon code for iteratoin " + i + "=" + iconCode);
+                                console.log("icon URL for iteratoin " + i + "=" + iconURL);
 
                             // Update the src attribute of the card...
                             $("#day"+i+"icon").attr("src", iconURL);
+                                console.log($("#day"+i+"icon").attr("src", iconURL));
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
                         $("#day"+i+"temp").text("TEMP: " + response.daily[i].temp.day + "F");
