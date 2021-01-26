@@ -181,10 +181,9 @@ console.log("Document is Ready");
                         console.log("For Loop increment = " + i);
 
                         // Get the date "i" starting with the current date, the assign it to the right HTML element based on data-dayIndex attribute
-                        $("#day"+i+"date").text(fiveDayObject[i]);
-                        console.log($("#day"+i+"date"));
-                        console.log(fiveDayObject.day+i);
-
+                        $("#day"+i+"date").text(fiveDayArray[i]);
+                            console.log($("#day"+i+"date"));
+                            console.log(fiveDayArray[i]);
 
                         // Get the weather forecast icon for the date i, and assign it to the proper html elemenet
 
