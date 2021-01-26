@@ -1,19 +1,18 @@
 // Wrap in Document.ready
 $(document).ready(function(){
-console.log("Document is Ready");
+    console.log("Document is Ready");
 
     // Define Dates For 5 Day Forecast and Group In an Array
-    
-        var day0 = dayjs().format("MM/DD/YYYY"); // Day 0 is current day
-        var day1 = dayjs().add(1, "day").format("MM/DD/YYYY");
-        var day2 = dayjs().add(2, "day").format("MM/DD/YYYY");
-        var day3= dayjs().add(3, "day").format("MM/DD/YYYY");
-        var day4 = dayjs().add(4, "day").format("MM/DD/YYYY");
-        var fiveDayArray = [day0, day1, day2, day3,day4];
+    var day0 = dayjs().format("MM/DD/YYYY"); // Day 0 is current day
+    var day1 = dayjs().add(1, "day").format("MM/DD/YYYY");
+    var day2 = dayjs().add(2, "day").format("MM/DD/YYYY");
+    var day3= dayjs().add(3, "day").format("MM/DD/YYYY");
+    var day4 = dayjs().add(4, "day").format("MM/DD/YYYY");
+    var fiveDayArray = [day0, day1, day2, day3,day4];
 
     // Define Global Variables
     var ajaxCallSuccess = true;
-    var searchedCitiesHistoryArray = [];
+    var retrievedSearchHistoryArray = [];
     var searchedCity;
     var getLatLonQueryURL;
     var searchedCityLAT;
@@ -21,42 +20,60 @@ console.log("Document is Ready");
     var getCityWeatherQueryURL;
     
     // Define Event Handlers
-        //Click Event For Search Button
+
+        // On Click of the Search button...
         $("#searchButton").on("click", function(e){
+            // Prevent reload of page
             e.preventDefault();
-            ajaxCallSuccess = true; // This resets the status check I will use before saving something locally. Its set to false if the ajax call fails.
+            // Re-set the ajax success boolean to true to support error handling
+            ajaxCallSuccess = true; 
+            // Set the searched city variable to the value submitted in search
             searchedCity = $("#searchedCityInput").val();
+            // Invoke the get City Lat Lon Functoin (which runs into the get city weather functoin)
             getCityLatLon();
         });
 
-        //AJAX error event if ajax call fails for any reason
+        // If there is an error of any kind with the AJAX call...
         $(document).ajaxError(function() {
+            // Alert the user there was an error...
             alert("This request has failed. Weather information was not found from the source. Please Try Again")
+            // Set the ajax call success vairable to false to stop the rest of the process and ensure nothing is saved to search history...
             ajaxCallSuccess = false;
         })
 
-        // Click Event For Clear Search History Button
+        // On Click of the Clear Search history buton....
         $("#clearSearchHistory").on("click", function() {
+            // Empty out local storage...
             localStorage.clear();
+            // Clear out all the search history divs appended to the search history ba...
             $("#searchHistoryList").empty();
+            // Hide the Clear Search History Button...
             $("#clearSearchHistory").addClass("d-none");
+            // Set the searched history array back to nothing...
+            retrievedSearchHistoryArray = [""];
+                console.log("retrieved search history array after clear = " +retrievedSearchHistoryArray);
         })
         
     // Define Script Logic
 
-        // When page loads...
+        // When page loads OR refreshes...
 
             // Check if any local storage exists for page...
-            var retrievedSearchHistory = localStorage.getItem("searchedCityHistory");
-            var retrievedSearchHistoryArray = JSON.parse(retrievedSearchHistory);
-                console.log("lenght of retrieved search history array is = " +retrievedSearchHistoryArray.length)
-                console.log("Retrieved Search History Array first two values = " + retrievedSearchHistoryArray[0]+ "&" + retrievedSearchHistoryArray[1]);
 
-                // If a search history is found...
+                // Get values from local storage and assign them to a variable...
+                var retrievedSearchHistory = localStorage.getItem("searchedCityHistory");
+
+                // If a there was locally stored items in the search history...
                 if (retrievedSearchHistory !== null) {
 
-                    // Set the search cities history array to the retrieved array...
-                    searchedCitiesHistoryArray = retrievedSearchHistoryArray;
+                    // Parse the retrieved string into individual array items and set it equal to a new variable...
+                    retrievedSearchHistoryArray = JSON.parse(retrievedSearchHistory);
+                        console.log("Detected numbers of searched cities in history = " + retrievedSearchHistoryArray.length);
+                        console.log("retrievedSearchHistoryArray is set to = " + retrievedSearchHistoryArray);
+                    
+                    // Reverse the array so that it lists the last searched item first...
+                    var reversedRetrievedSearchHistoryArray = retrievedSearchHistoryArray.reverse();
+                        console.log ("reversed array prior to adding to history bar = " + reversedRetrievedSearchHistoryArray);
 
                     // Loop through the arry and place them on the page...
                     for (i=0; i<retrievedSearchHistoryArray.length; i++) {
@@ -72,22 +89,28 @@ console.log("Document is Ready");
 
                         // Prepend that new div inside the div plceholder in html for searchHistoryList (NOT WORKING)
                         $("#searchHistoryList").prepend(newSearchDiv);
-
-                        // Show the clear storage button...
-                        $("#clearSearchHistory").removeClass("d-none");
-
-                        // Populate weather information (current and 5 day) for last city searched...
-    
-                        // Remove the d-none class for the main containers for current and 5 day forecast...
                     }
+
+                    // Show the clear storage button...
+                    $("#clearSearchHistory").removeClass("d-none");
+
+                    // Populate weather information (current and 5 day) for last city searched...
+
+                        //Set searched city variable to the last searched city from the array (which is index 0 since I use array UNSHIFT)...
+                        
+
+                        //Call the get CityLatLon function which leads into the get weather function...
+                    
+    
+                    // Remove the d-none class for the main containers for current and 5 day forecast...
 
                 } 
                 //If no search history is found...
-                else {
+                //else {
 
                     // Display the welcome DIV that prompts the user to search a city to get started...
 
-                }
+                //}
               
 
         // If I click on a city that is showing in the search history bar...
@@ -99,8 +122,8 @@ console.log("Document is Ready");
 
         // If I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityLatLon(){
-        console.log("getCityLatLon invoked");
-        $("#searchedCityInput").val(""); // This clears the search bar input..
+            console.log("getCityLatLon invoked");
+             $("#searchedCityInput").val(""); // This clears the search bar input...
 
             // Get the LAT and LON coordinats for the searched city so I can use those for a one-call API for current and forecasted weather...
 
@@ -113,11 +136,11 @@ console.log("Document is Ready");
                     url:getLatLonQueryURL,
                     method: "GET"
                 })
+
+                // Get the city LAT / LON values and assign the global variables the value
                 .then(function(resCoordinates){
                     console.log(resCoordinates);
-
-                    // Get the city LAT / LON values and assign the global variables the value
-                    searchedCityLAT = JSON.stringify(resCoordinates.coord.lat);
+                    searchedCityLAT = resCoordinates.coord.lat;
                     searchedCityLON = resCoordinates.coord.lon;
                     console.log ("Initial City Lat-Lon Translation after First API Call = " + searchedCityLAT + "," + searchedCityLON);
 
@@ -128,7 +151,7 @@ console.log("Document is Ready");
 
         // After the search button is clicked, and the function is run that gets LAT / LON Coordinates for my city....
         function getCityWeather() {
-        console.log("getCityWeather function invoked");
+            console.log("getCityWeather function invoked");
 
             // Check that searchedCity value and coordinates defined are  still the same...
             console.log ("Searched City Value upon invokation of getCityWeather function is = " + searchedCity);
@@ -200,9 +223,9 @@ console.log("Document is Ready");
                                 $("#uviPill").addClass("badge-danger");
                             }
                         
-                    // Call the function below to store city locally and add it to recently searched bar
+                    // Call the function below to store city locally and add it to recently searched bar (only if its a new search item, not a historical auto-load)
                     storeAndPrependNewSearchItem();
-                
+                    
                 // 5 DAY FORECAST (MAKE OWN FUNCTION?)
 
                     // Get the forecast for the current date, then loop through the activity for each day in the five day forecast...
@@ -230,10 +253,10 @@ console.log("Document is Ready");
             console.log("storeandprepend function called")
 
             // Push searched city into search city array as new index 0 value...
-            searchedCitiesHistoryArray.unshift(searchedCity);
+            retrievedSearchHistoryArray.unshift(searchedCity);
             
             // Store the array locally...
-            localStorage.setItem("searchedCityHistory", JSON.stringify(searchedCitiesHistoryArray)); 
+            localStorage.setItem("searchedCityHistory", JSON.stringify(retrievedSearchHistoryArray)); 
 
             // create a new div with the search city value
             var newSearchDiv = $("<div>");
