@@ -4,19 +4,12 @@ console.log("Document is Ready");
 
     // Define Dates For 5 Day Forecast and Group In an Array
     
-        var day0 = dayjs().format("MM/DD/YYYY"); // Day 0 is currente day
+        var day0 = dayjs().format("MM/DD/YYYY"); // Day 0 is current day
         var day1 = dayjs().add(1, "day").format("MM/DD/YYYY");
         var day2 = dayjs().add(2, "day").format("MM/DD/YYYY");
         var day3= dayjs().add(3, "day").format("MM/DD/YYYY");
         var day4 = dayjs().add(4, "day").format("MM/DD/YYYY");
-    
         var fiveDayArray = [day0, day1, day2, day3,day4];
-        
-            console.log(fiveDayArray[0]);
-            console.log(fiveDayArray[1]);
-            console.log(fiveDayArray[2]);
-            console.log(fiveDayArray[3]);
-            console.log(fiveDayArray[3]);
 
     // Define Global Variables
     var ajaxCallSuccess = true;
@@ -31,9 +24,7 @@ console.log("Document is Ready");
         //Click Event For Search Button
         $("#searchButton").on("click", function(e){
             e.preventDefault();
-            console.log("NEW Search Click Detected");
             ajaxCallSuccess = true; // This resets the status check I will use before saving something locally. Its set to false if the ajax call fails.
-                console.log("ajax call success variable after initial search button press = " + ajaxCallSuccess);
             searchedCity = $("#searchedCityInput").val();
             getCityLatLon();
         });
@@ -42,7 +33,6 @@ console.log("Document is Ready");
         $(document).ajaxError(function() {
             alert("This request has failed. Weather information was not found from the source. Please Try Again")
             ajaxCallSuccess = false;
-            console.log("ajax call success variable set to = " + ajaxCallSuccess);
         })
 
         // Click Event For Clear Search History Button
@@ -58,13 +48,18 @@ console.log("Document is Ready");
 
             // Check if any local storage exists for page...
             var retrievedSearchHistory = localStorage.getItem("searchedCityHistory");
-                console.log(retrievedSearchHistory);
+            var retrievedSearchHistoryArray = JSON.parse(retrievedSearchHistory);
+                console.log("lenght of retrieved search history array is = " +retrievedSearchHistoryArray.length)
+                console.log("Retrieved Search History Array first two values = " + retrievedSearchHistoryArray[0]+ "&" + retrievedSearchHistoryArray[1]);
 
                 // If a search history is found...
                 if (retrievedSearchHistory !== null) {
 
+                    // Set the search cities history array to the retrieved array...
+                    searchedCitiesHistoryArray = retrievedSearchHistoryArray;
+
                     // Loop through the arry and place them on the page...
-                    for (i=0; i<retrievedSearchHistory.length; i++) {
+                    for (i=0; i<retrievedSearchHistoryArray.length; i++) {
 
                         // create a new div with the search city value
                         var newSearchDiv = $("<div>");
@@ -73,7 +68,7 @@ console.log("Document is Ready");
                         newSearchDiv.addClass("list-group-item");
 
                         // Make the text of that item equal to whatever the searched city variable is
-                        newSearchDiv.text(retrievedSearchHistory[i]);
+                        newSearchDiv.text(retrievedSearchHistoryArray[i]);
 
                         // Prepend that new div inside the div plceholder in html for searchHistoryList (NOT WORKING)
                         $("#searchHistoryList").prepend(newSearchDiv);
@@ -165,23 +160,18 @@ console.log("Document is Ready");
 
                     // Get the weather icon for current weather, then assign it to the right html element
                     $("#currentWeatherIcon").html(response.current.weather[0].icon);
-                        console.log("Icon API result = " + response.current.weather[0].icon);
-
+                       
                     // Get the current temprature, then assign it to the right html element..
                     $("#currentTemp").text(response.current.temp);
-                        console.log("Temp API result = " + response.current.temp);
 
                     // Get the current humidity, then assign it to the right html element...
                     $("#currentHumidity").text(response.current.humidity);
-                        console.log("Humidity API result = " + response.current.humidity);
-
+                        
                     // Get the current windspeed and define it as a variable, then assign it to the right html element...
                     $("#currentWindSpeed").text(response.current.wind_speed);
-                        console.log("Current Wind Speed API Result = " + response.current.wind_speed);
-
+                      
                     // Get the current UV Index and define it as a variable, then assign it to the right html element...
                     $("#currentUVIndex").text(response.current.uvi);
-                        console.log("Current UVI Result = " + response.current.uvi)
                         currentUVI = response.current.uvi;
 
                         // Set the UV index pill the right color based on the value of being Low,Moderate,High,VeryHigh...
@@ -217,7 +207,6 @@ console.log("Document is Ready");
 
                     // Get the forecast for the current date, then loop through the activity for each day in the five day forecast...
                     for (i = 0; i<5; i++) {
-                        console.log("For Loop increment = " + i);
 
                         // Get the date "i" starting with the current date, the assign it to the right HTML element based on data-dayIndex attribute
                         $("#day"+i+"date").text(fiveDayArray[i]);
@@ -242,10 +231,9 @@ console.log("Document is Ready");
 
             // Push searched city into search city array as new index 0 value...
             searchedCitiesHistoryArray.unshift(searchedCity);
-                console.log("latest searched history array = " + searchedCitiesHistoryArray);
             
             // Store the array locally...
-            localStorage.setItem("searchedCityHistory", searchedCitiesHistoryArray); 
+            localStorage.setItem("searchedCityHistory", JSON.stringify(searchedCitiesHistoryArray)); 
 
             // create a new div with the search city value
             var newSearchDiv = $("<div>");
