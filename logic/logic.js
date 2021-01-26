@@ -70,10 +70,6 @@ $(document).ready(function(){
                     retrievedSearchHistoryArray = JSON.parse(retrievedSearchHistory);
                         console.log("Detected numbers of searched cities in history = " + retrievedSearchHistoryArray.length);
                         console.log("retrievedSearchHistoryArray is set to = " + retrievedSearchHistoryArray);
-                    
-                    // Reverse the array so that it lists the last searched item first...
-                    var reversedRetrievedSearchHistoryArray = retrievedSearchHistoryArray.reverse();
-                        console.log ("reversed array prior to adding to history bar = " + reversedRetrievedSearchHistoryArray);
 
                     // Loop through the arry and place them on the page...
                     for (i=0; i<retrievedSearchHistoryArray.length; i++) {
@@ -87,8 +83,8 @@ $(document).ready(function(){
                         // Make the text of that item equal to whatever the searched city variable is
                         newSearchDiv.text(retrievedSearchHistoryArray[i]);
 
-                        // Prepend that new div inside the div plceholder in html for searchHistoryList (NOT WORKING)
-                        $("#searchHistoryList").prepend(newSearchDiv);
+                        // APPEND that new div inside the div plceholder in html for searchHistoryList
+                        $("#searchHistoryList").append(newSearchDiv);
                     }
 
                     // Show the clear storage button...
@@ -96,12 +92,13 @@ $(document).ready(function(){
 
                     // Populate weather information (current and 5 day) for last city searched...
 
-                        //Set searched city variable to the last searched city from the array (which is index 0 since I use array UNSHIFT)...
+                        // Set searched city variable to the last searched city from the array (which is index 0 since I use array UNSHIFT)...
+                        searchedCity = retrievedSearchHistoryArray[0];
+                            console.log("Last searched city detected after refresh, prior to getting weather is " + retrievedSearchHistoryArray[0]);
                         
-
-                        //Call the get CityLatLon function which leads into the get weather function...
+                        // Call the get CityLatLon function which leads into the get weather function...
+                        getCityLatLon();
                     
-    
                     // Remove the d-none class for the main containers for current and 5 day forecast...
 
                 } 
@@ -182,7 +179,15 @@ $(document).ready(function(){
                     $("#currentDate").text(fiveDayArray[0]);
 
                     // Get the weather icon for current weather, then assign it to the right html element
-                    $("#currentWeatherIcon").html(response.current.weather[0].icon);
+
+                        // Define the src URL for the icon based on the code...
+                        var iconCode = response.current.weather[0].icon;
+                            console.log("ICON CODE = " + iconCode)
+                        var iconURL = "http://openweathermap.org/img/wn/"+iconCode+"@2x.png";
+                            console.log("ICONURL = " + iconURL);
+
+                        // Update the icon img source (src) attribute to this so that it shows an image...
+                         $("#currentWeatherIcon").attr("src", iconURL);
                        
                     // Get the current temprature, then assign it to the right html element..
                     $("#currentTemp").text(response.current.temp);
@@ -252,27 +257,34 @@ $(document).ready(function(){
         function storeAndPrependNewSearchItem() {
             console.log("storeandprepend function called")
 
-            // Push searched city into search city array as new index 0 value...
-            retrievedSearchHistoryArray.unshift(searchedCity);
+            // Only IF searched city does NOT already exist in the retrievedSearchHistoryArray (which it will if a user just refreshes the screen...)
+            var duplicateArrayValueBoolean = retrievedSearchHistoryArray.includes(searchedCity);
+                console.log("Does the array already include the searched value? " + duplicateArrayValueBoolean);
             
-            // Store the array locally...
-            localStorage.setItem("searchedCityHistory", JSON.stringify(retrievedSearchHistoryArray)); 
-
-            // create a new div with the search city value
-            var newSearchDiv = $("<div>");
-
-            // Give the new div a class name for bootsrap use list-group-item
-            newSearchDiv.addClass("list-group-item");
-
-            // Make the text of that item equal to whatever the searched city variable is
-            newSearchDiv.text(searchedCity);
-
-            // Prepend that new div inside the div plceholder in html for searchHistoryList
-            $("#searchHistoryList").prepend(newSearchDiv);
-
-            // Show the clear storage button...
-            $("#clearSearchHistory").removeClass("d-none");
-            
+            if (duplicateArrayValueBoolean === false) {
+                //Push searched city into search city array as new index 0 value...
+                retrievedSearchHistoryArray.unshift(searchedCity);
+                
+                // Store the array locally...
+                localStorage.setItem("searchedCityHistory", JSON.stringify(retrievedSearchHistoryArray)); 
+         
+                // create a new div with the search city value
+                var newSearchDiv = $("<div>");
+         
+                // Give the new div a class name for bootsrap use list-group-item
+                newSearchDiv.addClass("list-group-item");
+         
+                // Make the text of that item equal to whatever the searched city variable is
+                newSearchDiv.text(searchedCity);
+         
+                // Prepend that new div inside the div plceholder in html for searchHistoryList
+                $("#searchHistoryList").prepend(newSearchDiv);
+         
+                // Show the clear storage button...
+                $("#clearSearchHistory").removeClass("d-none");
+                     
+            }
+       
         }
              
 
