@@ -3,16 +3,18 @@ $(document).ready(function(){
 console.log("Document is Ready");
 
     // Define 5 Day Dates (Today + 4 Days) Using Day.JS API
-    var currentDate = dayjs().format("MM/DD/YYYY"); // Retrieved via Day.Js API
-        console.log("Current Date logged as = " + currentDate);
-    var day2 = dayjs().add(1, "day").format("MM/DD/YYYY");
-        console.log("Day two logged as = " + day2);
-    var day3 = dayjs().add(2, "day").format("MM/DD/YYYY");
-        console.log("Day two logged as = " + day3);
-    var day4 = dayjs().add(3, "day").format("MM/DD/YYYY");
-        console.log("Day two logged as = " + day4);
-    var day5 = dayjs().add(4, "day").format("MM/DD/YYYY");
-        console.log("Day two logged as = " + day5);
+    var fiveDayObject = {
+        day0: dayjs().format("MM/DD/YYYY"), // Day 0 is currente day
+        day1: dayjs().add(1, "day").format("MM/DD/YYYY"),
+        day2: dayjs().add(2, "day").format("MM/DD/YYYY"),
+        day3: dayjs().add(3, "day").format("MM/DD/YYYY"),
+        day4: dayjs().add(4, "day").format("MM/DD/YYYY"),
+    }
+        console.log("day 0 set to = " + fiveDayObject.day0);
+        console.log("day 1 set to = " + fiveDayObject.day1);
+        console.log("day 2 set to = " + fiveDayObject.day2);
+        console.log("day 3 set to = " + fiveDayObject.day3);
+        console.log("day 4 set to = " + fiveDayObject.day4);
 
     // Define Global Variables
     var ajaxCallSuccess = true;
@@ -22,7 +24,6 @@ console.log("Document is Ready");
     var searchedCityLON;
     var getCityWeatherQueryURL;
     
-
     // Define Event Handlers
         //Click Event For Search Button
         $("#searchButton").on("click", function(e){
