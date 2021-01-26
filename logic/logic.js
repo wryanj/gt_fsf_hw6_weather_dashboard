@@ -20,6 +20,7 @@ console.log("Document is Ready");
 
     // Define Global Variables
     var ajaxCallSuccess = true;
+    var searchedCitiesHistoryArray = [];
     var searchedCity;
     var getLatLonQueryURL;
     var searchedCityLAT;
@@ -48,15 +49,51 @@ console.log("Document is Ready");
         $("#clearSearchHistory").on("click", function() {
             localStorage.clear();
             $("#searchHistoryList").empty();
+            $("#clearSearchHistory").addClass("d-none");
         })
         
     // Define Script Logic
 
         // When page loads...
 
-            // Retrive prior city search history (from local storage) and display under search bar...
+            // Check if any local storage exists for page...
+            var retrievedSearchHistory = localStorage.getItem("searchedCityHistory");
+                console.log(retrievedSearchHistory);
 
-            // Populate weather information (current and 5 day) for last city searched...
+                // If a search history is found...
+                if (retrievedSearchHistory !== null) {
+
+                    // Loop through the arry and place them on the page...
+                    for (i=0; i<retrievedSearchHistory.length; i++) {
+
+                        // create a new div with the search city value
+                        var newSearchDiv = $("<div>");
+
+                        // Give the new div a class name for bootsrap use list-group-item
+                        newSearchDiv.addClass("list-group-item");
+
+                        // Make the text of that item equal to whatever the searched city variable is
+                        newSearchDiv.text(retrievedSearchHistory[i]);
+
+                        // Prepend that new div inside the div plceholder in html for searchHistoryList (NOT WORKING)
+                        $("#searchHistoryList").prepend(newSearchDiv);
+
+                        // Show the clear storage button...
+                        $("#clearSearchHistory").removeClass("d-none");
+
+                        // Populate weather information (current and 5 day) for last city searched...
+    
+                        // Remove the d-none class for the main containers for current and 5 day forecast...
+                    }
+
+                } 
+                //If no search history is found...
+                else {
+
+                    // Display the welcome DIV that prompts the user to search a city to get started...
+
+                }
+              
 
         // If I click on a city that is showing in the search history bar...
 
@@ -64,9 +101,11 @@ console.log("Document is Ready");
 
             // Run the getCityWeather Function...
 
+
         // If I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityLatLon(){
         console.log("getCityLatLon invoked");
+        $("#searchedCityInput").val(""); // This clears the search bar input..
 
             // Get the LAT and LON coordinats for the searched city so I can use those for a one-call API for current and forecasted weather...
 
@@ -193,18 +232,20 @@ console.log("Document is Ready");
                         $("#day"+i+"humidity").text("Humidity: " + response.daily[i].temp.day);
 
                     }     
-
             }) 
-                    
-                    
+                             
         }
            
         // Function called to store locally and prepend a searched city to the search history bar
         function storeAndPrependNewSearchItem() {
             console.log("storeandprepend function called")
 
-            // store value locally
-            localStorage.setItem("City_"+ searchedCity, searchedCity); 
+            // Push searched city into search city array as new index 0 value...
+            searchedCitiesHistoryArray.unshift(searchedCity);
+                console.log("latest searched history array = " + searchedCitiesHistoryArray);
+            
+            // Store the array locally...
+            localStorage.setItem("searchedCityHistory", searchedCitiesHistoryArray); 
 
             // create a new div with the search city value
             var newSearchDiv = $("<div>");
@@ -217,6 +258,9 @@ console.log("Document is Ready");
 
             // Prepend that new div inside the div plceholder in html for searchHistoryList
             $("#searchHistoryList").prepend(newSearchDiv);
+
+            // Show the clear storage button...
+            $("#clearSearchHistory").removeClass("d-none");
             
         }
              
