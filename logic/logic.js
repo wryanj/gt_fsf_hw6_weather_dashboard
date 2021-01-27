@@ -108,8 +108,10 @@ $(document).ready(function(){
                     $("#currentWeatherContainer").removeClass("d-none");
                     $("#fiveDayForecastContainer").removeClass("d-none");
                 } 
-
-                //If no search history is found...just display the welcome screen which is visible by default unless the class is added to hide it
+                //If no search history is found...just display the welcome screen
+                else {
+                    $("#welcomeScreenContainer").removeClass("d-none");
+                }
                 
               
         // If I click on a city that is showing in the search history bar...
@@ -261,7 +263,7 @@ $(document).ready(function(){
 
                     }     
 
-                // Hide the welcome screen and display the weather containers once information is loaded
+                // Hide the welcome screen and display the weather containers once information is loade
                 $("#welcomeScreenContainer").addClass("d-none");
                 $("#currentWeatherContainer").removeClass("d-none");
                 $("#fiveDayForecastContainer").removeClass("d-none");
