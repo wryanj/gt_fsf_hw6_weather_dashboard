@@ -35,14 +35,10 @@ $(document).ready(function(){
 
         // If I click on a historically searched city showing in the recently searched bar (event listner defined during button creation)...
         function historyButtonTriggerSearch() {
-            console.log("historyButton click detected");
-        
             // Assign the value text as the value of searched city variable...
             searchedCity = $(this).text();
-                console.log("Historically Searched Button Click Detected, Value for Search City Set to " + searchedCity);
-        
             // Invoke the getCityLatLon function...
-                getCityLatLon();
+            getCityLatLon();
         }
 
         // If there is an error of any kind with the AJAX call...
@@ -64,7 +60,6 @@ $(document).ready(function(){
             $("#clearSearchHistoryHeading").addClass("d-none");
             // Set the searched history array back to nothing...
             retrievedSearchHistoryArray = [""];
-                console.log("retrieved search history array after clear = " +retrievedSearchHistoryArray);
             // Reload the page..
             location.reload();
         })
@@ -83,8 +78,6 @@ $(document).ready(function(){
 
                     // Parse the retrieved string into individual array items and set it equal to a new variable...
                     retrievedSearchHistoryArray = JSON.parse(retrievedSearchHistory);
-                        console.log("Detected numbers of searched cities in history = " + retrievedSearchHistoryArray.length);
-                        console.log("retrievedSearchHistoryArray is set to = " + retrievedSearchHistoryArray);
 
                     // Loop through the arry and place them on the page...
                     for (i=0; i<retrievedSearchHistoryArray.length; i++) {
@@ -113,7 +106,6 @@ $(document).ready(function(){
 
                         // Set searched city variable to the last searched city from the array (which is index 0 since I use array UNSHIFT)...
                         searchedCity = retrievedSearchHistoryArray[0];
-                            console.log("Last searched city detected after refresh, prior to getting weather is " + retrievedSearchHistoryArray[0]);
                         
                         // Call the get CityLatLon function which leads into the get weather function...
                         getCityLatLon();
@@ -131,7 +123,7 @@ $(document).ready(function(){
         // If I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityLatLon(){
             console.log("getCityLatLon invoked");
-             $("#searchedCityInput").val(""); // This clears the search bar input as we already captured the value in the click handler stated above...
+             $("#searchedCityInput").val(""); 
 
             // Get the LAT and LON coordinats for the searched city so I can use those for a one-call API for current and forecasted weather...
 
@@ -147,10 +139,8 @@ $(document).ready(function(){
 
                 // Get the city LAT / LON values and assign the global variables the value
                 .then(function(resCoordinates){
-                    console.log(resCoordinates);
                     searchedCityLAT = resCoordinates.coord.lat;
                     searchedCityLON = resCoordinates.coord.lon;
-                    console.log ("Initial City Lat-Lon Translation after First API Call = " + searchedCityLAT + "," + searchedCityLON);
 
                     // When I complete the call above and define lat lon, Call the functoin to run the one-Call API from open weather (which requires search by city Lat / Lon)...
                     getCityWeather();
@@ -180,9 +170,6 @@ $(document).ready(function(){
 
                 // CURRENT WEATHER RETRIEVAL AND HANDLING (MAKE OWN FUNCTION?)
 
-                    // Console log the response so I can see how to index
-                    console.log(response);
-                        
                     // Get the current city name and define it as a variable, then assign it to the right html element...
                     $("#citySearched").text("").text(searchedCity);
 
@@ -193,12 +180,10 @@ $(document).ready(function(){
 
                         // Define the src URL for the icon based on the code...
                         var iconCode = response.current.weather[0].icon;
-                            console.log("ICON CODE = " + iconCode)
                         var iconURL = "http://openweathermap.org/img/wn/"+iconCode+"@2x.png";
-                            console.log("ICONURL = " + iconURL);
 
                         // Update the icon img source (src) attribute to this so that it shows an image...
-                         $("#currentWeatherIcon").attr("src", iconURL);
+                        $("#currentWeatherIcon").attr("src", iconURL);
                        
                     // Get the current temprature, then assign it to the right html element..
                     $("#currentTemp").text(response.current.temp);
@@ -255,12 +240,9 @@ $(document).ready(function(){
                             // Define the src URL for the icon based on the code by resetting values of local variables used above...
                             iconCode = response.daily[i].weather[0].icon;
                             iconURL = "http://openweathermap.org/img/wn/"+iconCode+"@2x.png";
-                                console.log("icon code for iteratoin " + i + "=" + iconCode);
-                                console.log("icon URL for iteratoin " + i + "=" + iconURL);
 
                             // Update the src attribute of the card...
                             $("#day"+i+"icon").attr("src", iconURL);
-                                console.log($("#day"+i+"icon").attr("src", iconURL));
 
                         // Get the temp forecast for the date i, and assign it to the proper html element
                         $("#day"+i+"temp").text("TEMP: " + response.daily[i].temp.day + "F");
@@ -289,7 +271,6 @@ $(document).ready(function(){
 
             // Only IF searched city does NOT already exist in the retrievedSearchHistoryArray (which it will if a user just refreshes the screen...)
             var duplicateArrayValueBoolean = retrievedSearchHistoryArray.includes(searchedCity);
-                console.log("Does the array already include the searched value? " + duplicateArrayValueBoolean);
             
             if (duplicateArrayValueBoolean === false) {
                 //Push searched city into search city array as new index 0 value...
@@ -314,10 +295,8 @@ $(document).ready(function(){
                 $("#clearSearchHistory").removeClass("d-none");
 
                 // Add the event handler to run the desired code if this is ever clicked...
-                $(".historyButton").on("click", historyButtonTriggerSearch);
-                     
+                $(".historyButton").on("click", historyButtonTriggerSearch);    
             }
-       
         }
         
 
