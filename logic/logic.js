@@ -33,6 +33,18 @@ $(document).ready(function(){
             getCityLatLon();
         });
 
+        // If I click on a historically searched city showing in the recently searched bar (event listner defined during button creation)...
+        function historyButtonTriggerSearch() {
+            console.log("historyButton click detected");
+        
+            // Assign the value text as the value of searched city variable...
+            searchedCity = $(this).text();
+                console.log("Historically Searched Button Click Detected, Value for Search City Set to " + searchedCity);
+        
+            // Invoke the getCityLatLon function...
+                getCityLatLon();
+        }
+
         // If there is an error of any kind with the AJAX call...
         $(document).ajaxError(function() {
             // Alert the user there was an error...
@@ -81,13 +93,16 @@ $(document).ready(function(){
                         var newSearchDiv = $("<button>");
 
                         // Give the new div a class name for bootsrap use list-group-item
-                        newSearchDiv.addClass("btn btn-light btn-block bg-white my-1 text-left");
+                        newSearchDiv.addClass("btn btn-light btn-block bg-white my-1 text-left historyButton");
 
                         // Make the text of that item equal to whatever the searched city variable is
                         newSearchDiv.text(retrievedSearchHistoryArray[i]);
 
                         // APPEND that new div inside the div plceholder in html for searchHistoryList
                         $("#searchHistoryList").append(newSearchDiv);
+
+                        // Add the event handler to run the desired code if this is ever clicked...
+                        $(".historyButton").on("click", historyButtonTriggerSearch);
                     }
 
                     // Show the clear storage button and heading...
@@ -111,20 +126,12 @@ $(document).ready(function(){
                 //If no search history is found...just display the welcome screen
                 else {
                     $("#welcomeScreenContainer").removeClass("d-none");
-                }
-                
-              
-        // If I click on a city that is showing in the search history bar...
-
-            // Assign the value text as the value of searched city variable...
-
-            // Run the getCityWeather Function...
-
-
+                }  
+         
         // If I type a city into the search bar and hit search (the click handler that calls this function is defined in the script above)...
         function getCityLatLon(){
             console.log("getCityLatLon invoked");
-             $("#searchedCityInput").val(""); // This clears the search bar input...
+             $("#searchedCityInput").val(""); // This clears the search bar input as we already captured the value in the click handler stated above...
 
             // Get the LAT and LON coordinats for the searched city so I can use those for a one-call API for current and forecasted weather...
 
@@ -295,7 +302,7 @@ $(document).ready(function(){
                 var newSearchDiv = $("<button>");
          
                 // Give the new div a class name for bootsrap use list-group-item
-                newSearchDiv.addClass("btn btn-light btn-block bg-white text-left my-1");
+                newSearchDiv.addClass("btn btn-light btn-block bg-white text-left my-1 historyButton");
          
                 // Make the text of that item equal to whatever the searched city variable is
                 newSearchDiv.text(searchedCity);
@@ -305,10 +312,13 @@ $(document).ready(function(){
          
                 // Show the clear storage button...
                 $("#clearSearchHistory").removeClass("d-none");
+
+                // Add the event handler to run the desired code if this is ever clicked...
+                $(".historyButton").on("click", historyButtonTriggerSearch);
                      
             }
        
         }
-             
+        
 
 }) // End of Document.Ready Wrap
