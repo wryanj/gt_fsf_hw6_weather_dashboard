@@ -9,7 +9,7 @@ This assignment asked us to create a weather dashboard that could retrieve and d
 4.  [Credits](#Credits)
 
 ## Deployed Application
-[Enter]
+[https://wryanj.github.io/gt_fsf_hw6_weather_dashboard/]
 
 ## Motivation
 I did this to progress my knowledge on working with third party apis and JSON. I also further improved my comfort working with Jquery for dynamically creating and manipulating html elements and related attributes. 
@@ -17,11 +17,17 @@ I did this to progress my knowledge on working with third party apis and JSON. I
 ## Description
 For this assignment, I took the example image as a guideline for my U.I but made some of my own customizations and additions. I used bootstrap 4.5 to complete almost all of my styling needs. In addition to the assignment requirements, I added some extras like a clear search button and recently searched header that display or vanish based on weather there is a search history to display. In addition I created taller five day forecast cards, and added some shadow to the main containers for current and future weather:
 
-![hw6 img1](https://user-images.githubusercontent.com/72420733/106054406-f9237980-60b9-11eb-965a-2473f1f836d7.PNG)
+![image](https://user-images.githubusercontent.com/72420733/106056080-43a5f580-60bc-11eb-883a-0ff617e9ecd7.png)
+
+UV index was color coded based on its value from low to high with 4 total tier options:
+
+![image](https://user-images.githubusercontent.com/72420733/106056330-8a93eb00-60bc-11eb-9db4-ee545976439c.png)
+
+![image](https://user-images.githubusercontent.com/72420733/106056382-9aabca80-60bc-11eb-8448-2373ccbf3471.png)
 
 Lastly, I made it such that if the user has never been to the site (or has no search history), they are given a welcome screen instructing them to make a first search. This displays based on whether local storage exists for the user:
 
-![hw6 img2](https://user-images.githubusercontent.com/72420733/106054556-325be980-60ba-11eb-925d-83da499af899.PNG)
+![image](https://user-images.githubusercontent.com/72420733/106056465-b3b47b80-60bc-11eb-994e-097a459d5656.png)
 
 In terms of API's, I used the open weather API reccomended for the assignment in addition the day JS api for providing dates for the dynamic five day forecast. 
 
