@@ -74,28 +74,28 @@
                     </div>
 
                     <!--Summary of City Right Now-->
-                    <div id = "currentWeatherContainer"class="card my-3 d-none">
+                    <div id = "currentWeatherContainer"class="card my-3 shadow d-none ">
                         <div class="card-body">
-                          <h5 class="card-title"> 
+                          <h5 class="card-title px-3"> 
                               <span id = "citySearched">City</span> 
                               (<span id = "currentDate">Date</span>) 
                               <img id = "currentWeatherIcon" alt="weathericon"> 
                             </h5>
-                          <p class="card-text py-1">Temprature: <span id=currentTemp></span></p>
-                          <p class="card-text py-1">Humidity: <span id=currentHumidity></span> %</p>
-                          <p class="card-text py-1">Wind Speed: <span id=currentWindSpeed></span> MPH</p>
-                          <p class="card-text py-1">UV Index: <span id = "uviPill" class="badge badge-pill badge-primary"><span id=currentUVIndex></span></span></p>
+                          <p class="card-text py-1 px-3">Temprature: <span id=currentTemp></span></p>
+                          <p class="card-text py-1 px-3">Humidity: <span id=currentHumidity></span> %</p>
+                          <p class="card-text py-1 px-3">Wind Speed: <span id=currentWindSpeed></span> MPH</p>
+                          <p class="card-text py-1 px-3">UV Index: <span id = "uviPill" class="badge badge-pill badge-primary"><span id=currentUVIndex></span></span></p>
                         </div>
                     </div>
 
                     <!--5 Day Forecast-->
-                    <div id = "fiveDayForecastContainer" class="d-none">
+                    <div id = "fiveDayForecastContainer" class="d-none p-4 mt-2 shadow">
                         <h4 class = "my-3">5-Day Forecast</h4>
 
                         <div class = "card-deck">
 
                             <div class="card bg-info text-white" style="width: 10rem">
-                                <div class="card-body">
+                                <div class="card-body ">
                                   <h6 id ="day0date" class="card-title">M/DD/YYY</h6>
                                   <p class="card-text py-1"><img id="day0icon" alt="icon"></p>
                                   <p id = "day0temp" class="card-text py-1">Temp: </p>
